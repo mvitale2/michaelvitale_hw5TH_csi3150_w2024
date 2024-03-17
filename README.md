@@ -51,7 +51,13 @@ This is the main div that the user will see. It contains all of the questions as
 This is the final div the user sees. The div `score_text` is left empty so that its content can be dynamically generated. 
 
 ### style.css
-As a note, a portion of the classes defined in this file will only affect content that is dynamically generated. If you're attempting to modify one of those classes, keep in my that you'll have to use the string in `quizApp.js` as a reference. 
+If you would like to change the styling of the application, this is the file you will want to go to. 
+
+As a note, a portion of the classes defined in this file will only affect content that is dynamically generated. If you're attempting to modify one of those classes, keep in my that you'll have to use the string in `quizApp.js` as a reference. Here's a list of all such occurences in `quizApp.js`:
+- Line 93, `showQuestions` function
+- Line 128 & 129, tick & cross icons
+- line 132, `optionSelected` function
+- Line 249, `queCounter` function 
 
 The functionality for the "box" divs to be hidden and shown is done through this code: 
 ``` css
@@ -102,11 +108,8 @@ The styles in the pseudoclass are applied when a certain condition is met. In th
 
 You may also notice that this button lacks a space between it and its class, `.restart`. This is because `button.restart` selects all buttons that have the restart class, while if there was a space between `button` and `.restart` that would select all elements with the restart class that are children of a button. 
 
-### quizApp.js
-Most of the functions defined within this file are called inside the event listeners added to the buttons. 
-
 ### questions.js
-This file follows a structure that makes it easy to add in new questions and options. If all you want to do is add or change questions, this is the correct section. Here is a template for a new question:
+This file follows a structure that makes it easy to add in new questions. Here is a template for a new question:
 ``` javascript
 {
     numb: n,
@@ -123,15 +126,36 @@ This file follows a structure that makes it easy to add in new questions and opt
 
 To add it in, simply make a new line above or below the `// Duplicate the object declaration and initialization above for more questions` line and paste it. 
 
-If you wish to have more than 4 options (or maybe less than 4), you will also have to modify the `showQuestions` function in `quizApp.js`, which is covered in the `quizApp.js` section. As a disclaimer, each question must have the same amount of questions each. This is due to how `showQuestions` works. 
+If you wish to have more than 4 options (or maybe less than 4), you will also have to modify the `showQuestions` function in `quizApp.js`, which is covered in the `quizApp.js` section below. As a disclaimer, each question must have the same amount of options each. This is due to how `showQuestions` works. 
 
 As a slightly more in-depth explanation, this file is just a JSON array. It is accessed in `quizApp.js` to dynamically build the HTML required for each question and option to be displayed on the webpage. 
 
+### quizApp.js
+This is the file where you will have to go in order to change many of the functionalities of the app itself. 
+All of the HTML elements are grabbed in the beginning by their class names. This is how JS directly interacts with the DOM. 
+The first thing that happens in this file is that each button is given an event listener. These event listeners define a function to call when the event occurs. These functions all call other functions defined later in the document. 
+You can read a summary of what each of these functions do in the Functional Features section. 
 
+Provided below are some guidlines for a couple common changes you are likely to want to make to this file. 
 
+#### Changing the amount of options available for each question
+This requires you to also modify the question structure in `questions.js`. Each question needs to have the same amount of options. 
 
+To make the required change in this file, navigate to the `showQuestions` function. Here is a template for an option: 
+``` javascript
+'<div class="option"><span>' +
+    questions[index].options[n] +
+    "</span></div>" +
+```
 
+Paste this in the `let option tag = ` variable. Ensure that you change "n" to the proper option number. Additionally, if the option you're pasting is the last option, change the final "+" to a ";". 
 
+#### Changing the amount of time for each question
+This is a very simple change. 
+1. Line 33, `startTimer(15);`
+2. Line 38 `let timeValue = 15;`
+3. Line 50 `timeValue = 15;`
 
+Change 15 to whatever you desire. This value is in seconds. 
 
-
+If you wish to remove the time requirement altogether, simply remove these lines, as well as any `startTimerLine` calls. 
